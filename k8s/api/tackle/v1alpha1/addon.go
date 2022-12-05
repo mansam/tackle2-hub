@@ -22,14 +22,12 @@ import (
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-//
 // Mount specification.
 type Mount struct {
 	Name  string `json:"name"`
 	Claim string `json:"claim"`
 }
 
-//
 // AddonSpec defines the desired state of Addon
 type AddonSpec struct {
 	// Addon fqin.
@@ -40,7 +38,6 @@ type AddonSpec struct {
 	Mounts []Mount `json:"mounts,omitempty"`
 }
 
-//
 // AddonStatus defines the observed state of Addon
 type AddonStatus struct {
 	//
@@ -51,7 +48,6 @@ type AddonStatus struct {
 	ObservedGeneration int64 `json:"observedGeneration,omitempty"`
 }
 
-//
 // +genclient
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 // +k8s:openapi-gen=true
@@ -65,7 +61,6 @@ type Addon struct {
 	Status          AddonStatus `json:"status,omitempty"`
 }
 
-//
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type AddonList struct {
 	meta.TypeMeta `json:",inline"`

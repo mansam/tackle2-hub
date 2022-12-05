@@ -15,7 +15,6 @@ import (
 	"strconv"
 )
 
-//
 // Routes
 const (
 	PathfinderRoot   = "/pathfinder"
@@ -23,13 +22,11 @@ const (
 	AssessmentsRootX = AssessmentsRoot + "/*" + Wildcard
 )
 
-//
 // PathfinderHandler handles assessment routes.
 type PathfinderHandler struct {
 	BaseHandler
 }
 
-//
 // AddRoutes adds routes.
 func (h PathfinderHandler) AddRoutes(e *gin.Engine) {
 	routeGroup := e.Group(PathfinderRoot)
@@ -54,12 +51,10 @@ func (h PathfinderHandler) ReverseProxy(ctx *gin.Context) {
 	proxy.ServeHTTP(ctx.Writer, ctx.Request)
 }
 
-//
 // Pathfinder client.
 type Pathfinder struct {
 }
 
-//
 // DeleteAssessment deletes associated assessments by application Ids.
 func (r *Pathfinder) DeleteAssessment(ids []uint, ctx *gin.Context) (err error) {
 	client := r.client()
@@ -94,7 +89,6 @@ func (r *Pathfinder) DeleteAssessment(ids []uint, ctx *gin.Context) (err error) 
 	return
 }
 
-//
 // Build the client.
 func (r *Pathfinder) client() (client *http.Client) {
 	client = &http.Client{
@@ -103,7 +97,6 @@ func (r *Pathfinder) client() (client *http.Client) {
 	return
 }
 
-//
 // Build the request
 func (r *Pathfinder) request(method, endpoint string, header http.Header) (request *http.Request) {
 	u, _ := url.Parse(os.Getenv("PATHFINDER_URL"))

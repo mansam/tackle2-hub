@@ -18,7 +18,6 @@ import (
 	"github.com/konveyor/tackle2-hub/model"
 )
 
-//
 // BucketHandler provides bucket management.
 type BucketHandler struct {
 }
@@ -212,7 +211,6 @@ func (h *BucketHandler) getDirArchive(ctx *gin.Context, dir string) {
 	}
 }
 
-//
 // content at path.
 func (h *BucketHandler) content(ctx *gin.Context, owner *model.BucketOwner) {
 	if owner.Bucket == "" {
@@ -225,7 +223,6 @@ func (h *BucketHandler) content(ctx *gin.Context, owner *model.BucketOwner) {
 		rPath))
 }
 
-//
 // upload file at path.
 func (h *BucketHandler) upload(ctx *gin.Context, owner *model.BucketOwner) {
 	if owner.Bucket == "" {
@@ -277,7 +274,6 @@ func (h *BucketHandler) upload(ctx *gin.Context, owner *model.BucketOwner) {
 	ctx.Status(http.StatusNoContent)
 }
 
-//
 // Delete from the bucket at path.
 func (h *BucketHandler) delete(ctx *gin.Context, owner *model.BucketOwner) {
 	if owner.Bucket == "" {

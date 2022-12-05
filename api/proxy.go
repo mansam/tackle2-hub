@@ -9,7 +9,6 @@ import (
 	"net/http"
 )
 
-//
 // Routes
 const (
 	ProxiesRoot = "/proxies"
@@ -20,7 +19,6 @@ const (
 	Kind = "kind"
 )
 
-//
 // ProxyHandler handles proxy resource routes.
 type ProxyHandler struct {
 	BaseHandler
@@ -171,7 +169,6 @@ func (h ProxyHandler) Update(ctx *gin.Context) {
 	ctx.Status(http.StatusNoContent)
 }
 
-//
 // Proxy REST resource.
 type Proxy struct {
 	Resource
@@ -183,7 +180,6 @@ type Proxy struct {
 	Identity *Ref     `json:"identity"`
 }
 
-//
 // With updates the resource with the model.
 func (r *Proxy) With(m *model.Proxy) {
 	r.Resource.With(&m.Model)
@@ -198,7 +194,6 @@ func (r *Proxy) With(m *model.Proxy) {
 	}
 }
 
-//
 // Model builds a model.
 func (r *Proxy) Model() (m *model.Proxy) {
 	m = &model.Proxy{

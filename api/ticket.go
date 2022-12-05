@@ -9,26 +9,22 @@ import (
 	"net/http"
 )
 
-//
 // Routes
 const (
 	TicketsRoot = "/tickets"
 	TicketRoot  = "/tickets" + "/:" + ID
 )
 
-//
 // Params.
 const (
 	TrackerId = "tracker"
 )
 
-//
 // TicketHandler handles ticket routes.
 type TicketHandler struct {
 	BaseHandler
 }
 
-//
 // AddRoutes adds routes.
 func (h TicketHandler) AddRoutes(e *gin.Engine) {
 	routeGroup := e.Group("/")
@@ -148,35 +144,41 @@ func (h TicketHandler) Delete(ctx *gin.Context) {
 	ctx.Status(http.StatusNoContent)
 }
 
-//
 // Ticket API Resource
 type Ticket struct {
 	Resource
 	Kind        string
 	Reference   string
+	Link        string
+	Parent      string
+	Error       bool
+	Message     string
 	Status      string
 	Fields      Fields
 	Application Ref
 	Tracker     Ref
 }
 
-//
 // With updates the resource with the model.
 func (r *Ticket) With(m *model.Ticket) {
 	r.Resource.With(&m.Model)
 	r.Kind = m.Kind
 	r.Reference = m.Reference
+	r.Parent = m.Parent
+	r.Link = m.Link
+	r.Error = m.Error
+	r.Message = m.Message
 	r.Status = m.Status
-	r.Application = r.ref(m.ApplicationID, m.Application)
-	r.Tracker = r.ref(m.TrackerID, m.Tracker)
+	r.Application = r.ref(m.ApplicationID, &m.Application)
+	r.Tracker = r.ref(m.TrackerID, &m.Tracker)
 	_ = json.Unmarshal(m.Fields, &r.Fields)
 }
 
-//
 // Model builds a model.
 func (r *Ticket) Model() (m *model.Ticket) {
 	m = &model.Ticket{
 		Kind:          r.Kind,
+		Parent:        r.Parent,
 		ApplicationID: r.Application.ID,
 		TrackerID:     r.Tracker.ID,
 	}

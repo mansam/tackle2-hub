@@ -5,14 +5,12 @@ import (
 	"strconv"
 )
 
-//
 // Application API.
 type Application struct {
 	// hub API client.
 	client *Client
 }
 
-//
 // Get an application by ID.
 func (h *Application) Get(id uint) (r *api.Application, err error) {
 	r = &api.Application{}
@@ -21,7 +19,6 @@ func (h *Application) Get(id uint) (r *api.Application, err error) {
 	return
 }
 
-//
 // List applications.
 func (h *Application) List() (list []api.Application, err error) {
 	list = []api.Application{}
@@ -29,7 +26,6 @@ func (h *Application) List() (list []api.Application, err error) {
 	return
 }
 
-//
 // Update an application by ID.
 func (h *Application) Update(r *api.Application) (err error) {
 	path := Params{api.ID: r.ID}.inject(api.ApplicationRoot)
@@ -43,7 +39,6 @@ func (h *Application) Update(r *api.Application) (err error) {
 	return
 }
 
-//
 // FindIdentity by kind.
 func (h *Application) FindIdentity(id uint, kind string) (r *api.Identity, found bool, err error) {
 	list := []api.Identity{}

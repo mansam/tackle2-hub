@@ -8,20 +8,17 @@ import (
 	"net/http"
 )
 
-//
 // Routes
 const (
 	BusinessServicesRoot = "/businessservices"
 	BusinessServiceRoot  = BusinessServicesRoot + "/:" + ID
 )
 
-//
 // BusinessServiceHandler handles business-service routes.
 type BusinessServiceHandler struct {
 	BaseHandler
 }
 
-//
 // AddRoutes adds routes.
 func (h BusinessServiceHandler) AddRoutes(e *gin.Engine) {
 	routeGroup := e.Group("/")
@@ -165,7 +162,6 @@ func (h BusinessServiceHandler) Update(ctx *gin.Context) {
 	ctx.Status(http.StatusNoContent)
 }
 
-//
 // BusinessService REST resource.
 type BusinessService struct {
 	Resource
@@ -174,7 +170,6 @@ type BusinessService struct {
 	Stakeholder *Ref   `json:"owner"`
 }
 
-//
 // With updates the resource with the model.
 func (r *BusinessService) With(m *model.BusinessService) {
 	r.Resource.With(&m.Model)
@@ -183,7 +178,6 @@ func (r *BusinessService) With(m *model.BusinessService) {
 	r.Stakeholder = r.refPtr(m.StakeholderID, m.Stakeholder)
 }
 
-//
 // Model builds a model.
 func (r *BusinessService) Model() (m *model.BusinessService) {
 	m = &model.BusinessService{

@@ -4,24 +4,22 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/konveyor/tackle2-hub/auth"
 	"github.com/konveyor/tackle2-hub/model"
+	"github.com/konveyor/tackle2-hub/ticket"
 	"gorm.io/gorm/clause"
 	"net/http"
 )
 
-//
 // Routes
 const (
 	TrackersRoot = "/trackers"
 	TrackerRoot  = "/trackers" + "/:" + ID
 )
 
-//
 // TrackerHandler handles ticket tracker routes.
 type TrackerHandler struct {
 	BaseHandler
 }
 
-//
 // AddRoutes adds routes.
 func (h TrackerHandler) AddRoutes(e *gin.Engine) {
 	routeGroup := e.Group("/")
@@ -104,7 +102,30 @@ func (h TrackerHandler) Create(ctx *gin.Context) {
 	}
 	m := r.Model()
 	m.CreateUser = h.BaseHandler.CurrentUser(ctx)
-	result := h.DB.Create(m)
+
+	// load the identity for the tracker so that
+	// the connection can be tested and metadata
+	// can be retrieved.
+	i := model.Identity{}
+	result := h.DB.First(&i, m.IdentityID)
+	if result.Error != nil {
+		h.createFailed(ctx, err)
+		return
+	}
+	m.Identity = i
+
+	connector, err := ticket.NewConnector(m)
+	if err != nil {
+		h.createFailed(ctx, err)
+		return
+	}
+	err = connector.GetMetadata()
+	if err != nil {
+		h.createFailed(ctx, err)
+		return
+	}
+
+	result = h.DB.Create(m)
 	if result.Error != nil {
 		h.createFailed(ctx, result.Error)
 		return
@@ -169,7 +190,6 @@ func (h TrackerHandler) Update(ctx *gin.Context) {
 	ctx.Status(http.StatusNoContent)
 }
 
-//
 // Tracker API Resource
 type Tracker struct {
 	Resource
@@ -177,10 +197,9 @@ type Tracker struct {
 	URL      string `json:"url"`
 	Kind     string `json:"kind"`
 	Status   string `json:"status"`
-	Identity *Ref   `json:"identity"`
+	Identity Ref    `json:"identity"`
 }
 
-//
 // With updates the resource with the model.
 func (r *Tracker) With(m *model.Tracker) {
 	r.Resource.With(&m.Model)
@@ -188,20 +207,18 @@ func (r *Tracker) With(m *model.Tracker) {
 	r.URL = m.URL
 	r.Kind = m.Kind
 	r.Status = m.Status
-	r.Identity = r.refPtr(m.IdentityID, m.Identity)
+	r.Identity = r.ref(m.IdentityID, &m.Identity)
 }
 
-//
 // Model builds a model.
 func (r *Tracker) Model() (m *model.Tracker) {
 	m = &model.Tracker{
-		Name: r.Name,
-		URL:  r.URL,
-		Kind: r.Kind,
+		Name:       r.Name,
+		URL:        r.URL,
+		Kind:       r.Kind,
+		IdentityID: r.Identity.ID,
 	}
-	if r.Identity != nil {
-		m.IdentityID = &r.Identity.ID
-	}
+
 	m.ID = r.ID
 
 	return

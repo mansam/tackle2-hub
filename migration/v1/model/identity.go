@@ -1,6 +1,5 @@
 package model
 
-//
 // Identity represents and identity with a set of credentials.
 type Identity struct {
 	Model

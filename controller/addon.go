@@ -24,15 +24,12 @@ const (
 	Name = "addon"
 )
 
-//
 // Package logger.
 var log = logging.WithName(Name)
 
-//
 // Settings defines applcation settings.
 var Settings = &settings.Settings
 
-//
 // Add the controller.
 func Add(mgr manager.Manager, db *gorm.DB, adminChanged chan int) error {
 	reconciler := &Reconciler{
@@ -64,7 +61,6 @@ func Add(mgr manager.Manager, db *gorm.DB, adminChanged chan int) error {
 	return nil
 }
 
-//
 // Reconciler reconciles addon CRs.
 type Reconciler struct {
 	record.EventRecorder
@@ -74,7 +70,6 @@ type Reconciler struct {
 	Log          *logging.Logger
 }
 
-//
 // Reconcile a Addon CR.
 // Note: Must not a pointer receiver to ensure that the
 // logger and other state is not shared.
@@ -130,7 +125,6 @@ func (r Reconciler) Reconcile(request reconcile.Request) (result reconcile.Resul
 	return
 }
 
-//
 // addonChanged an addon has been created/updated.
 // After the "admin" addon has reconciled, the volumes need
 // be re-populated and the volume manager notified.
@@ -165,7 +159,6 @@ func (r *Reconciler) addonChanged(addon *api.Addon) (err error) {
 	return
 }
 
-//
 // addonDeleted an addon has been deleted.
 // The volumes need to be deleted.
 func (r *Reconciler) addonDeleted(name string) (err error) {

@@ -4,14 +4,12 @@ import (
 	"github.com/konveyor/tackle2-hub/api"
 )
 
-//
 // Identity API.
 type Identity struct {
 	// hub API client.
 	client *Client
 }
 
-//
 // Get an identity by ID.
 func (h *Identity) Get(id uint) (r *api.Identity, err error) {
 	r = &api.Identity{}
@@ -29,7 +27,6 @@ func (h *Identity) Get(id uint) (r *api.Identity, err error) {
 	return
 }
 
-//
 // List identities.
 func (h *Identity) List() (list []api.Identity, err error) {
 	list = []api.Identity{}

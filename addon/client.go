@@ -15,14 +15,12 @@ import (
 	"time"
 )
 
-//
 // Param.
 type Param struct {
 	Key   string
 	Value string
 }
 
-//
 // Client provides a REST client.
 type Client struct {
 	// baseURL for the nub.
@@ -35,7 +33,6 @@ type Client struct {
 	transport http.RoundTripper
 }
 
-//
 // Get a resource.
 func (r *Client) Get(path string, object interface{}, params ...Param) (err error) {
 	request := func() (request *http.Request, err error) {
@@ -80,7 +77,6 @@ func (r *Client) Get(path string, object interface{}, params ...Param) (err erro
 	return
 }
 
-//
 // Post a resource.
 func (r *Client) Post(path string, object interface{}) (err error) {
 	request := func() (request *http.Request, err error) {
@@ -127,7 +123,6 @@ func (r *Client) Post(path string, object interface{}) (err error) {
 	return
 }
 
-//
 // Put a resource.
 func (r *Client) Put(path string, object interface{}) (err error) {
 	request := func() (request *http.Request, err error) {
@@ -174,7 +169,6 @@ func (r *Client) Put(path string, object interface{}) (err error) {
 	return
 }
 
-//
 // Delete a resource.
 func (r *Client) Delete(path string) (err error) {
 	request := func() (request *http.Request, err error) {
@@ -206,7 +200,6 @@ func (r *Client) Delete(path string) (err error) {
 	return
 }
 
-//
 // Send the request.
 // Resilient against transient hub availability.
 // Retries for 10 minutes.
@@ -241,7 +234,6 @@ func (r *Client) send(rb func() (*http.Request, error)) (response *http.Response
 	return
 }
 
-//
 // buildTransport builds transport.
 func (r *Client) buildTransport() (err error) {
 	if r.transport != nil {
@@ -261,7 +253,6 @@ func (r *Client) buildTransport() (err error) {
 	return
 }
 
-//
 // Join the URL.
 func (r *Client) join(path string) (parsedURL *url.URL) {
 	parsedURL, _ = url.Parse(r.baseURL)

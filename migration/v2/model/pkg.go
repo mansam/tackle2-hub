@@ -9,11 +9,9 @@ var (
 	Settings = &settings.Settings
 )
 
-//
 // Field (data) types.
 type JSON = datatypes.JSON
 
-//
 // All builds all models.
 // Models are enumerated such that each are listed after
 // all the other models on which they may depend.

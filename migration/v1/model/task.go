@@ -53,11 +53,9 @@ type TaskGroup struct {
 	State string
 }
 
-//
 // Map alias.
 type Map = map[string]interface{}
 
-//
 // TTL time-to-live.
 type TTL struct {
 	Created   int `json:"created,omitempty"`

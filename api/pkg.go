@@ -13,7 +13,6 @@ var (
 	log      = logging.WithName("api")
 )
 
-//
 // Params
 const (
 	ID       = "id"
@@ -22,7 +21,6 @@ const (
 	Wildcard = "wildcard"
 )
 
-//
 // Headers
 const (
 	Authorization = "Authorization"
@@ -31,14 +29,12 @@ const (
 	Directory     = "X-Directory"
 )
 
-//
 // Header Values
 const (
 	DirectoryArchive = "archive"
 	DirectoryExpand  = "expand"
 )
 
-//
 // All builds all handlers.
 func All() []Handler {
 	return []Handler{
@@ -62,10 +58,11 @@ func All() []Handler {
 		&TaskGroupHandler{},
 		&VolumeHandler{},
 		&PathfinderHandler{},
+		&TicketHandler{},
+		&TrackerHandler{},
 	}
 }
 
-//
 // Handler.
 type Handler interface {
 	With(*gorm.DB, client.Client)

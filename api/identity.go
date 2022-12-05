@@ -8,21 +8,18 @@ import (
 	"strconv"
 )
 
-//
 // Routes
 const (
 	IdentitiesRoot = "/identities"
 	IdentityRoot   = IdentitiesRoot + "/:" + ID
 )
 
-//
 // Params.
 const (
 	Decrypted = "decrypted"
 	AppId     = "application"
 )
 
-//
 // IdentityHandler handles identity resource routes.
 type IdentityHandler struct {
 	BaseHandler
@@ -34,7 +31,7 @@ func (h IdentityHandler) AddRoutes(e *gin.Engine) {
 	routeGroup.GET(IdentitiesRoot, h.setDecrypted, h.List)
 	routeGroup.GET(IdentitiesRoot+"/", h.setDecrypted, h.List)
 	routeGroup.POST(IdentitiesRoot, h.Create)
-	routeGroup.GET(IdentityRoot, h.Get)
+	routeGroup.GET(IdentityRoot, h.setDecrypted, h.Get)
 	routeGroup.PUT(IdentityRoot, h.Update)
 	routeGroup.DELETE(IdentityRoot, h.Delete)
 }
@@ -212,7 +209,6 @@ func (h IdentityHandler) Update(ctx *gin.Context) {
 	ctx.Status(http.StatusNoContent)
 }
 
-//
 // Set `decrypted` in the context.
 // Results in 403 when the token does not have the required scope.
 func (h *IdentityHandler) setDecrypted(ctx *gin.Context) {
@@ -229,7 +225,6 @@ func (h *IdentityHandler) setDecrypted(ctx *gin.Context) {
 	return
 }
 
-//
 // Identity REST resource.
 type Identity struct {
 	Resource
@@ -242,7 +237,6 @@ type Identity struct {
 	Settings    string `json:"settings"`
 }
 
-//
 // With updates the resource with the model.
 func (r *Identity) With(m *model.Identity) {
 	r.Resource.With(&m.Model)
@@ -255,7 +249,6 @@ func (r *Identity) With(m *model.Identity) {
 	r.Settings = m.Settings
 }
 
-//
 // Model builds a model.
 func (r *Identity) Model() (m *model.Identity) {
 	m = &model.Identity{

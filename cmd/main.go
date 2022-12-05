@@ -35,7 +35,6 @@ func init() {
 	_ = Settings.Load()
 }
 
-//
 // Setup the DB and models.
 func Setup() (db *gorm.DB, err error) {
 	err = migration.Migrate(migration.All())
@@ -49,14 +48,12 @@ func Setup() (db *gorm.DB, err error) {
 	return
 }
 
-//
 // buildScheme adds CRDs to the k8s scheme.
 func buildScheme() (err error) {
 	err = crd.AddToScheme(scheme.Scheme)
 	return
 }
 
-//
 // addonManager
 func addonManager(db *gorm.DB, adminChanged chan int) (mgr manager.Manager, err error) {
 	http.Handle("/metrics", promhttp.Handler())
@@ -86,7 +83,6 @@ func addonManager(db *gorm.DB, adminChanged chan int) (mgr manager.Manager, err 
 	return
 }
 
-//
 // main.
 func main() {
 	log.Info("Started", "settings", Settings)

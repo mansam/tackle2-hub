@@ -8,20 +8,17 @@ import (
 	"net/http"
 )
 
-//
 // Routes
 const (
 	StakeholdersRoot = "/stakeholders"
 	StakeholderRoot  = StakeholdersRoot + "/:" + ID
 )
 
-//
 // StakeholderHandler handles stakeholder routes.
 type StakeholderHandler struct {
 	BaseHandler
 }
 
-//
 // AddRoutes adds routes.
 func (h StakeholderHandler) AddRoutes(e *gin.Engine) {
 	routeGroup := e.Group("/")
@@ -171,7 +168,6 @@ func (h StakeholderHandler) Update(ctx *gin.Context) {
 	ctx.Status(http.StatusNoContent)
 }
 
-//
 // Stakeholder REST resource.
 type Stakeholder struct {
 	Resource
@@ -182,7 +178,6 @@ type Stakeholder struct {
 	JobFunction      *Ref   `json:"jobFunction"`
 }
 
-//
 // With updates the resource with the model.
 func (r *Stakeholder) With(m *model.Stakeholder) {
 	r.Resource.With(&m.Model)
@@ -201,7 +196,6 @@ func (r *Stakeholder) With(m *model.Stakeholder) {
 	}
 }
 
-//
 // Model builds a model.
 func (r *Stakeholder) Model() (m *model.Stakeholder) {
 	m = &model.Stakeholder{

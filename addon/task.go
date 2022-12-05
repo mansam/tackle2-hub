@@ -7,7 +7,6 @@ import (
 	"github.com/konveyor/tackle2-hub/task"
 )
 
-//
 // Task API.
 type Task struct {
 	// hub API client.
@@ -18,7 +17,6 @@ type Task struct {
 	report api.TaskReport
 }
 
-//
 // Load a task by ID.
 func (h *Task) Load() {
 	var err error
@@ -33,7 +31,6 @@ func (h *Task) Load() {
 	return
 }
 
-//
 // Application returns the application associated with the task.
 func (h *Task) Application() (r *api.Application, err error) {
 	appRef := h.task.Application
@@ -47,14 +44,12 @@ func (h *Task) Application() (r *api.Application, err error) {
 	return
 }
 
-//
 // Data returns the addon data.
 func (h *Task) Data() (d map[string]interface{}) {
 	d = h.task.Data.(map[string]interface{})
 	return
 }
 
-//
 // DataWith populates the addon data object.
 func (h *Task) DataWith(object interface{}) (err error) {
 	b, _ := json.Marshal(h.task.Data)
@@ -62,13 +57,11 @@ func (h *Task) DataWith(object interface{}) (err error) {
 	return
 }
 
-//
 // Variant returns the task variant.
 func (h *Task) Variant() string {
 	return h.task.Variant
 }
 
-//
 // Started report addon started.
 func (h *Task) Started() {
 	h.Load()
@@ -79,7 +72,6 @@ func (h *Task) Started() {
 	return
 }
 
-//
 // Succeeded report addon succeeded.
 func (h *Task) Succeeded() {
 	h.report.Status = task.Succeeded
@@ -89,7 +81,6 @@ func (h *Task) Succeeded() {
 	return
 }
 
-//
 // Failed report addon failed.
 // The reason can be a printf style format.
 func (h *Task) Failed(reason string, x ...interface{}) {
@@ -103,7 +94,6 @@ func (h *Task) Failed(reason string, x ...interface{}) {
 	return
 }
 
-//
 // Activity report addon activity.
 // The description can be a printf style format.
 func (h *Task) Activity(entry string, x ...interface{}) {
@@ -119,7 +109,6 @@ func (h *Task) Activity(entry string, x ...interface{}) {
 	return
 }
 
-//
 // Total report addon total items.
 func (h *Task) Total(n int) {
 	h.report.Total = n
@@ -131,7 +120,6 @@ func (h *Task) Total(n int) {
 	return
 }
 
-//
 // Increment report addon completed (+1) items.
 func (h *Task) Increment() {
 	h.report.Completed++
@@ -143,7 +131,6 @@ func (h *Task) Increment() {
 	return
 }
 
-//
 // Completed report addon completed (N) items.
 func (h *Task) Completed(n int) {
 	h.report.Completed = n
@@ -152,7 +139,6 @@ func (h *Task) Completed(n int) {
 	return
 }
 
-//
 // Bucket returns the bucket path.
 func (h *Task) Bucket() (b string) {
 	r := &api.Task{}
@@ -168,7 +154,6 @@ func (h *Task) Bucket() (b string) {
 	return
 }
 
-//
 // Result report addon result.
 func (h *Task) Result(object interface{}) {
 	h.report.Result = object
@@ -177,7 +162,6 @@ func (h *Task) Result(object interface{}) {
 	return
 }
 
-//
 // deleteReport deletes the task report.
 func (h *Task) deleteReport() {
 	params := Params{
@@ -190,7 +174,6 @@ func (h *Task) deleteReport() {
 	}
 }
 
-//
 // pushReport create/update the task report.
 func (h *Task) pushReport() {
 	var err error

@@ -4,14 +4,12 @@ import (
 	"github.com/konveyor/tackle2-hub/api"
 )
 
-//
 // Volume API.
 type Volume struct {
 	// hub API client.
 	client *Client
 }
 
-//
 // Get a volume by ID.
 func (h *Volume) Get(id uint) (r *api.Volume, err error) {
 	r = &api.Volume{}
@@ -20,7 +18,6 @@ func (h *Volume) Get(id uint) (r *api.Volume, err error) {
 	return
 }
 
-//
 // List proxies.
 func (h *Volume) List() (list []api.Volume, err error) {
 	list = []api.Volume{}
@@ -31,7 +28,6 @@ func (h *Volume) List() (list []api.Volume, err error) {
 	return
 }
 
-//
 // Find by name.
 // Returns nil when not found.
 func (h *Volume) Find(name string) (r *api.Volume, err error) {
@@ -49,7 +45,6 @@ func (h *Volume) Find(name string) (r *api.Volume, err error) {
 	return
 }
 
-//
 // Update a volume by ID.
 func (h *Volume) Update(r *api.Volume) (err error) {
 	path := Params{api.ID: r.ID}.inject(api.VolumeRoot)

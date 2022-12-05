@@ -21,7 +21,6 @@ import (
 
 var Log = logging.WithName("api")
 
-//
 // BaseHandler base handler.
 type BaseHandler struct {
 	// DB
@@ -36,7 +35,6 @@ func (h *BaseHandler) With(db *gorm.DB, client client.Client) {
 	h.Client = client
 }
 
-//
 // getFailed handles Get() errors.
 func (h *BaseHandler) getFailed(ctx *gin.Context, err error) {
 	if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -69,7 +67,6 @@ func (h *BaseHandler) getFailed(ctx *gin.Context, err error) {
 		url)
 }
 
-//
 // listFailed handles List() errors.
 func (h *BaseHandler) listFailed(ctx *gin.Context, err error) {
 	ctx.JSON(
@@ -86,7 +83,6 @@ func (h *BaseHandler) listFailed(ctx *gin.Context, err error) {
 		url)
 }
 
-//
 // createFailed handles Create() errors.
 func (h *BaseHandler) createFailed(ctx *gin.Context, err error) {
 	status := http.StatusInternalServerError
@@ -97,6 +93,8 @@ func (h *BaseHandler) createFailed(ctx *gin.Context, err error) {
 		case sqlite3.ErrConstraintUnique,
 			sqlite3.ErrConstraintPrimaryKey:
 			status = http.StatusConflict
+		case sqlite3.ErrConstraintForeignKey:
+			status = http.StatusBadRequest
 		}
 	}
 
@@ -119,7 +117,6 @@ func (h *BaseHandler) createFailed(ctx *gin.Context, err error) {
 		url)
 }
 
-//
 // updateFailed handles Update() errors.
 func (h *BaseHandler) updateFailed(ctx *gin.Context, err error) {
 	status := http.StatusInternalServerError
@@ -129,6 +126,8 @@ func (h *BaseHandler) updateFailed(ctx *gin.Context, err error) {
 		switch sqliteErr.ExtendedCode {
 		case sqlite3.ErrConstraintUnique:
 			status = http.StatusConflict
+		case sqlite3.ErrConstraintForeignKey:
+			status = http.StatusBadRequest
 		}
 	}
 
@@ -146,7 +145,6 @@ func (h *BaseHandler) updateFailed(ctx *gin.Context, err error) {
 		url)
 }
 
-//
 // deleteFailed handles Delete() errors.
 func (h *BaseHandler) deleteFailed(ctx *gin.Context, err error) {
 	if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -167,7 +165,6 @@ func (h *BaseHandler) deleteFailed(ctx *gin.Context, err error) {
 		url)
 }
 
-//
 // bindFailed handles errors from BindJSON().
 func (h *BaseHandler) bindFailed(ctx *gin.Context, err error) {
 	ctx.JSON(
@@ -177,7 +174,6 @@ func (h *BaseHandler) bindFailed(ctx *gin.Context, err error) {
 		})
 }
 
-//
 // preLoad update DB to pre-load fields.
 func (h *BaseHandler) preLoad(db *gorm.DB, fields ...string) (tx *gorm.DB) {
 	tx = db
@@ -188,7 +184,6 @@ func (h *BaseHandler) preLoad(db *gorm.DB, fields ...string) (tx *gorm.DB) {
 	return
 }
 
-//
 // fields builds a map of fields.
 func (h *BaseHandler) fields(m interface{}) (mp map[string]interface{}) {
 	isExported := func(ft reflect.StructField) bool {
@@ -223,7 +218,6 @@ func (h *BaseHandler) fields(m interface{}) (mp map[string]interface{}) {
 	return
 }
 
-//
 // pk returns the PK (ID) parameter.
 func (h *BaseHandler) pk(ctx *gin.Context) (id uint) {
 	s := ctx.Param(ID)
@@ -232,11 +226,10 @@ func (h *BaseHandler) pk(ctx *gin.Context) (id uint) {
 	return
 }
 
-//
 // modBody updates the body using the `mod` function.
-//   1. read the body.
-//   2. mod()
-//   3. write body.
+//  1. read the body.
+//  2. mod()
+//  3. write body.
 func (h *BaseHandler) modBody(
 	ctx *gin.Context,
 	r interface{},
@@ -260,7 +253,6 @@ func (h *BaseHandler) modBody(
 	return
 }
 
-//
 // CurrentUser gets username from Keycloak auth token.
 func (h *BaseHandler) CurrentUser(ctx *gin.Context) (user string) {
 	user = ctx.GetString(auth.TokenUser)
@@ -271,7 +263,6 @@ func (h *BaseHandler) CurrentUser(ctx *gin.Context) (user string) {
 	return
 }
 
-//
 // HasScope determines if the token has the specified scope.
 func (h *BaseHandler) HasScope(ctx *gin.Context, scope string) (b bool) {
 	in := auth.BaseScope{}
@@ -289,7 +280,6 @@ func (h *BaseHandler) HasScope(ctx *gin.Context, scope string) (b bool) {
 	return
 }
 
-//
 // REST resource.
 type Resource struct {
 	ID         uint      `json:"id"`
@@ -298,7 +288,6 @@ type Resource struct {
 	CreateTime time.Time `json:"createTime"`
 }
 
-//
 // With updates the resource with the model.
 func (r *Resource) With(m *model.Model) {
 	r.ID = m.ID
@@ -307,7 +296,6 @@ func (r *Resource) With(m *model.Model) {
 	r.CreateTime = m.CreateTime
 }
 
-//
 // ref with id and named model.
 func (r *Resource) ref(id uint, m interface{}) (ref Ref) {
 	ref.ID = id
@@ -315,7 +303,6 @@ func (r *Resource) ref(id uint, m interface{}) (ref Ref) {
 	return
 }
 
-//
 // refPtr with id and named model.
 func (r *Resource) refPtr(id *uint, m interface{}) (ref *Ref) {
 	if id == nil {
@@ -327,7 +314,6 @@ func (r *Resource) refPtr(id *uint, m interface{}) (ref *Ref) {
 	return
 }
 
-//
 // idPtr extracts ref ID.
 func (r *Resource) idPtr(ref *Ref) (id *uint) {
 	if ref != nil {
@@ -336,7 +322,6 @@ func (r *Resource) idPtr(ref *Ref) (id *uint) {
 	return
 }
 
-//
 // nameOf model.
 func (r *Resource) nameOf(m interface{}) (name string) {
 	mt := reflect.TypeOf(m)
@@ -360,7 +345,6 @@ func (r *Resource) nameOf(m interface{}) (name string) {
 	return
 }
 
-//
 // Ref represents a FK.
 // Contains the PK and (name) natural key.
 // The name is read-only.
@@ -369,7 +353,6 @@ type Ref struct {
 	Name string `json:"name"`
 }
 
-//
 // With id and named model.
 func (r *Ref) With(id uint, name string) {
 	r.ID = id

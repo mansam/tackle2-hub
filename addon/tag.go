@@ -4,14 +4,12 @@ import (
 	"github.com/konveyor/tackle2-hub/api"
 )
 
-//
 // Tag API.
 type Tag struct {
 	// hub API client.
 	client *Client
 }
 
-//
 // Create a tag.
 func (h *Tag) Create(r *api.Tag) (err error) {
 	err = h.client.Post(api.TagsRoot, r)
@@ -24,7 +22,6 @@ func (h *Tag) Create(r *api.Tag) (err error) {
 	return
 }
 
-//
 // Get a tag by ID.
 func (h *Tag) Get(id uint) (r *api.Tag, err error) {
 	r = &api.Tag{}
@@ -33,7 +30,6 @@ func (h *Tag) Get(id uint) (r *api.Tag, err error) {
 	return
 }
 
-//
 // List tags.
 func (h *Tag) List() (list []api.Tag, err error) {
 	list = []api.Tag{}
@@ -41,7 +37,6 @@ func (h *Tag) List() (list []api.Tag, err error) {
 	return
 }
 
-//
 // Delete a tag.
 func (h *Tag) Delete(r *api.Tag) (err error) {
 	path := Params{api.ID: r.ID}.inject(api.TagRoot)
@@ -55,14 +50,12 @@ func (h *Tag) Delete(r *api.Tag) (err error) {
 	return
 }
 
-//
 // TagType API.
 type TagType struct {
 	// hub API client.
 	client *Client
 }
 
-//
 // Create a tag-type.
 func (h *TagType) Create(m *api.TagType) (err error) {
 	err = h.client.Post(api.TagTypesRoot, m)
@@ -75,7 +68,6 @@ func (h *TagType) Create(m *api.TagType) (err error) {
 	return
 }
 
-//
 // Get a tag-type by ID.
 func (h *TagType) Get(id uint) (r *api.TagType, err error) {
 	r = &api.TagType{}
@@ -84,7 +76,6 @@ func (h *TagType) Get(id uint) (r *api.TagType, err error) {
 	return
 }
 
-//
 // List tag-types.
 func (h *TagType) List() (list []api.TagType, err error) {
 	list = []api.TagType{}
@@ -92,7 +83,6 @@ func (h *TagType) List() (list []api.TagType, err error) {
 	return
 }
 
-//
 // Delete a tag-type.
 func (h *TagType) Delete(r *api.TagType) (err error) {
 	path := Params{api.ID: r.ID}.inject(api.TagTypeRoot)

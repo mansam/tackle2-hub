@@ -12,21 +12,18 @@ import (
 	"time"
 )
 
-//
 // Record types
 const (
 	RecordTypeApplication = "1"
 	RecordTypeDependency  = "2"
 )
 
-//
 // Import Statuses
 const (
 	InProgress = "In Progress"
 	Completed  = "Completed"
 )
 
-//
 // Routes
 const (
 	SummariesRoot = "/importsummaries"
@@ -37,13 +34,11 @@ const (
 	ImportRoot    = ImportsRoot + "/:" + ID
 )
 
-//
 // ImportHandler handles import routes.
 type ImportHandler struct {
 	BaseHandler
 }
 
-//
 // AddRoutes adds routes.
 func (h ImportHandler) AddRoutes(e *gin.Engine) {
 	e.GET(SummariesRoot, h.ListSummaries)
@@ -58,7 +53,6 @@ func (h ImportHandler) AddRoutes(e *gin.Engine) {
 	e.POST(UploadRoot, h.UploadCSV)
 }
 
-//
 // GetImport godoc
 // @summary Get an import by ID.
 // @description Get an import by ID.
@@ -79,7 +73,6 @@ func (h ImportHandler) GetImport(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, m.AsMap())
 }
 
-//
 // ListImports godoc
 // @summary List imports.
 // @description List imports.
@@ -114,7 +107,6 @@ func (h ImportHandler) ListImports(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, resources)
 }
 
-//
 // DeleteImport godoc
 // @summary Delete an import.
 // @description Delete an import. This leaves any created application or dependency.
@@ -133,7 +125,6 @@ func (h ImportHandler) DeleteImport(ctx *gin.Context) {
 	ctx.Status(http.StatusNoContent)
 }
 
-//
 // GetSummary godoc
 // @summary Get an import summary by ID.
 // @description Get an import by ID.
@@ -154,7 +145,6 @@ func (h ImportHandler) GetSummary(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, m)
 }
 
-//
 // ListSummaries godoc
 // @summary List import summaries.
 // @description List import summaries.
@@ -180,7 +170,6 @@ func (h ImportHandler) ListSummaries(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, resources)
 }
 
-//
 // DeleteSummary godoc
 // @summary Delete an import summary and associated import records.
 // @description Delete an import summary and associated import records.
@@ -199,7 +188,6 @@ func (h ImportHandler) DeleteSummary(ctx *gin.Context) {
 	ctx.Status(http.StatusNoContent)
 }
 
-//
 // UploadCSV godoc
 // @summary Upload a CSV containing applications and dependencies to import.
 // @description Upload a CSV containing applications and dependencies to import.
@@ -296,7 +284,6 @@ func (h ImportHandler) UploadCSV(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, summary)
 }
 
-//
 // DownloadCSV godoc
 // @summary Export the source CSV for a particular import summary.
 // @description Export the source CSV for a particular import summary.
@@ -317,13 +304,14 @@ func (h ImportHandler) DownloadCSV(ctx *gin.Context) {
 	ctx.Data(http.StatusOK, "text/csv", m.Content)
 }
 
-//
 // CSV upload supports two types of records in the same file: application imports, and dependencies.
 // A dependency row must consist of the following columns:
 //
 // Col 1: Record Type 1 -- This will always contain a "2" for a dependency
 // Col 2: Application Name -- The name of the application that has the dependency relationship.
-//                            This application must exist.
+//
+//	This application must exist.
+//
 // Col 6: Dependency -- The name of the application on the other side of the dependency relationship.
 // Col 7: Dependency Direction -- Whether this is a "northbound" or "southbound" dependency.
 //
@@ -345,7 +333,6 @@ func (h ImportHandler) dependencyFromRow(fileName string, row []string) (app mod
 	return
 }
 
-//
 // CSV upload supports two types of records in the same file: application imports, and dependencies.
 // An application row must consist of the following columns:
 //
@@ -354,7 +341,9 @@ func (h ImportHandler) dependencyFromRow(fileName string, row []string) (app mod
 // Col 3: Description -- A short description of the application.
 // Col 4: Comments -- Additional comments on the application.
 // Col 5: Business Service -- The name of the business service this Application should belong to.
-//                            This business service must already exist.
+//
+//	This business service must already exist.
+//
 // Col 6: Dependency -- Optional dependency to another Application (by name)
 // Col 7: Dependency direction -- Either northbound or southbound
 //
@@ -411,11 +400,9 @@ func (h ImportHandler) applicationFromRow(fileName string, row []string) (app mo
 	return
 }
 
-//
 // Import REST resource.
 type Import map[string]interface{}
 
-//
 // ImportSummary REST resource.
 type ImportSummary struct {
 	Resource
@@ -427,7 +414,6 @@ type ImportSummary struct {
 	CreateEntities bool      `json:"createEntities"`
 }
 
-//
 // With updates the resource with the model.
 func (r *ImportSummary) With(m *model.ImportSummary) {
 	r.Resource.With(&m.Model)

@@ -6,35 +6,29 @@ import (
 	"strings"
 )
 
-//
 // Validators provide token validation based on claims.
 var Validators []Validator
 
-//
 // Validator provides token validation.
 type Validator interface {
 	// Valid determines if the token is valid.
 	Valid(token *jwt.Token) (valid bool)
 }
 
-//
 // NoAuth provider always permits access.
 type NoAuth struct {
 }
 
-//
 // NewToken creates a new signed token.
 func (r NoAuth) NewToken(user string, scopes []string, claims jwt.MapClaims) (signed string, err error) {
 	return
 }
 
-//
 // Authenticate the token
 func (r *NoAuth) Authenticate(token string) (jwToken *jwt.Token, err error) {
 	return
 }
 
-//
 // Scopes decodes a list of scopes from the token.
 // For the NoAuth provider, this just returns a single
 // wildcard scope matching everything.
@@ -43,19 +37,16 @@ func (r *NoAuth) Scopes(jwToken *jwt.Token) (scopes []Scope) {
 	return
 }
 
-//
 // User mocks username for NoAuth
 func (r *NoAuth) User(jwToken *jwt.Token) (name string) {
 	name = "admin.noauth"
 	return
 }
 
-//
 // Builtin auth provider.
 type Builtin struct {
 }
 
-//
 // Authenticate the token
 func (r *Builtin) Authenticate(token string) (jwToken *jwt.Token, err error) {
 	jwToken, err = jwt.Parse(
@@ -111,7 +102,6 @@ func (r *Builtin) Authenticate(token string) (jwToken *jwt.Token, err error) {
 	return
 }
 
-//
 // Scopes returns a list of scopes.
 func (r *Builtin) Scopes(jwToken *jwt.Token) (scopes []Scope) {
 	claims := jwToken.Claims.(jwt.MapClaims)
@@ -125,7 +115,6 @@ func (r *Builtin) Scopes(jwToken *jwt.Token) (scopes []Scope) {
 	return
 }
 
-//
 // User returns the user associated with the token.
 func (r *Builtin) User(jwToken *jwt.Token) (user string) {
 	claims := jwToken.Claims.(jwt.MapClaims)
@@ -133,7 +122,6 @@ func (r *Builtin) User(jwToken *jwt.Token) (user string) {
 	return
 }
 
-//
 // NewToken creates a new signed token.
 func (r *Builtin) NewToken(user string, scopes []string, claims jwt.MapClaims) (signed string, err error) {
 	token := jwt.New(jwt.SigningMethodHS512)

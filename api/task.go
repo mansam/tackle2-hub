@@ -13,7 +13,6 @@ import (
 	"time"
 )
 
-//
 // Routes
 const (
 	TasksRoot      = "/tasks"
@@ -28,14 +27,12 @@ const (
 	LocatorParam = "locator"
 )
 
-//
 // TaskHandler handles task routes.
 type TaskHandler struct {
 	BaseHandler
 	BucketHandler
 }
 
-//
 // AddRoutes adds routes.
 func (h TaskHandler) AddRoutes(e *gin.Engine) {
 	routeGroup := e.Group("/")
@@ -445,7 +442,6 @@ func (h TaskHandler) DeleteReport(ctx *gin.Context) {
 	ctx.Status(http.StatusNoContent)
 }
 
-//
 // Fields omitted by:
 //   - Create
 //   - Update.
@@ -466,11 +462,9 @@ func (h *TaskHandler) omitted(db *gorm.DB) (out *gorm.DB) {
 	return
 }
 
-//
 // TTL
 type TTL model.TTL
 
-//
 // Task REST resource.
 type Task struct {
 	Resource
@@ -496,7 +490,6 @@ type Task struct {
 	Report      *TaskReport `json:"report,omitempty"`
 }
 
-//
 // With updates the resource with the model.
 func (r *Task) With(m *model.Task) {
 	r.Resource.With(&m.Model)
@@ -527,7 +520,6 @@ func (r *Task) With(m *model.Task) {
 	}
 }
 
-//
 // Model builds a model.
 func (r *Task) Model() (m *model.Task) {
 	m = &model.Task{
@@ -549,7 +541,6 @@ func (r *Task) Model() (m *model.Task) {
 	return
 }
 
-//
 // TaskReport REST resource.
 type TaskReport struct {
 	Resource
@@ -562,7 +553,6 @@ type TaskReport struct {
 	TaskID    uint        `json:"task"`
 }
 
-//
 // With updates the resource with the model.
 func (r *TaskReport) With(m *model.TaskReport) {
 	r.Resource.With(&m.Model)
@@ -579,7 +569,6 @@ func (r *TaskReport) With(m *model.TaskReport) {
 	}
 }
 
-//
 // Model builds a model.
 func (r *TaskReport) Model() (m *model.TaskReport) {
 	if r.Activity == nil {

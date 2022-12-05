@@ -9,7 +9,6 @@ import (
 	"net/http"
 )
 
-//
 // Routes
 const (
 	VolumesRoot     = "/volumes"
@@ -17,13 +16,11 @@ const (
 	VolumeCleanRoot = VolumeRoot + "/clean"
 )
 
-//
 // VolumeHandler handles volume routes.
 type VolumeHandler struct {
 	BaseHandler
 }
 
-//
 // AddRoutes adds routes.
 func (h VolumeHandler) AddRoutes(e *gin.Engine) {
 	routeGroup := e.Group("/")
@@ -153,7 +150,6 @@ func (h VolumeHandler) Clean(ctx *gin.Context) {
 	ctx.JSON(http.StatusAccepted, r)
 }
 
-//
 // Volume REST resource.
 type Volume struct {
 	Resource
@@ -162,7 +158,6 @@ type Volume struct {
 	Used     string `json:"used"`
 }
 
-//
 // With model.
 func (r *Volume) With(m *model.Volume) {
 	r.Resource.With(&m.Model)
@@ -171,7 +166,6 @@ func (r *Volume) With(m *model.Volume) {
 	r.Used = m.Used
 }
 
-//
 // Model builds a model.
 func (r *Volume) Model() (m *model.Volume) {
 	m = &model.Volume{

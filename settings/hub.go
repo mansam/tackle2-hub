@@ -140,7 +140,6 @@ func (r *Hub) Load() (err error) {
 	return
 }
 
-//
 // namespace determines the namespace.
 func (r *Hub) namespace() (ns string, err error) {
 	ns, found := os.LookupEnv(EnvNamespace)

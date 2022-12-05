@@ -4,7 +4,6 @@ import (
 	"fmt"
 )
 
-//
 // SoftError A "soft" anticipated error.
 type SoftError struct {
 	Reason string
@@ -23,7 +22,6 @@ func (e *SoftError) Soft() *SoftError {
 	return e
 }
 
-//
 // Conflict reports 409 error.
 type Conflict struct {
 	SoftError
@@ -39,7 +37,6 @@ func (e *Conflict) Is(err error) (matched bool) {
 	return
 }
 
-//
 // NotFound reports 404 error.
 type NotFound struct {
 	SoftError

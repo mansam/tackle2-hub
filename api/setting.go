@@ -10,20 +10,17 @@ import (
 	"strings"
 )
 
-//
 // Routes
 const (
 	SettingsRoot = "/settings"
 	SettingRoot  = SettingsRoot + "/:" + Key
 )
 
-//
 // SettingHandler handles setting routes.
 type SettingHandler struct {
 	BaseHandler
 }
 
-//
 // AddRoutes add routes.
 func (h SettingHandler) AddRoutes(e *gin.Engine) {
 	routeGroup := e.Group("/")
@@ -190,7 +187,6 @@ func (h SettingHandler) Delete(ctx *gin.Context) {
 	ctx.Status(http.StatusNoContent)
 }
 
-//
 // Setting REST Resource
 type Setting struct {
 	Key   string      `json:"key"`

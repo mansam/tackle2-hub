@@ -9,7 +9,6 @@ import (
 	"net/http"
 )
 
-//
 // Routes
 const (
 	ApplicationsRoot = "/applications"
@@ -17,14 +16,12 @@ const (
 	AppBucketRoot    = ApplicationRoot + "/bucket/*" + Wildcard
 )
 
-//
 // ApplicationHandler handles application resource routes.
 type ApplicationHandler struct {
 	BaseHandler
 	BucketHandler
 }
 
-//
 // AddRoutes adds routes.
 func (h ApplicationHandler) AddRoutes(e *gin.Engine) {
 	routeGroup := e.Group("/")
@@ -294,7 +291,6 @@ func (h ApplicationHandler) BucketDelete(ctx *gin.Context) {
 	h.delete(ctx, &m.BucketOwner)
 }
 
-//
 // Application REST resource.
 type Application struct {
 	Resource
@@ -311,7 +307,6 @@ type Application struct {
 	BusinessService *Ref        `json:"businessService"`
 }
 
-//
 // With updates the resource using the model.
 func (r *Application) With(m *model.Application) {
 	r.Resource.With(&m.Model)
@@ -343,7 +338,6 @@ func (r *Application) With(m *model.Application) {
 	}
 }
 
-//
 // Model builds a model.
 func (r *Application) Model() (m *model.Application) {
 	m = &model.Application{
@@ -385,7 +379,6 @@ func (r *Application) Model() (m *model.Application) {
 	return
 }
 
-//
 // Repository REST nested resource.
 type Repository struct {
 	Kind   string `json:"kind"`
@@ -395,6 +388,5 @@ type Repository struct {
 	Path   string `json:"path"`
 }
 
-//
 // Facts about the application.
 type Facts map[string]interface{}

@@ -23,7 +23,6 @@ var (
 	Log      = logging.WithName("volume-scheduler")
 )
 
-//
 // Manager provides task management.
 type Manager struct {
 	// DB
@@ -34,7 +33,6 @@ type Manager struct {
 	taskID uint
 }
 
-//
 // Run the manager.
 func (m *Manager) Run(trigger chan int) {
 	d := Unit * time.Duration(
@@ -57,7 +55,6 @@ func (m *Manager) Run(trigger chan int) {
 	}()
 }
 
-//
 // update volumes.
 // The last task is deleted and the task ID reused.
 func (m *Manager) update() {
@@ -101,7 +98,6 @@ func (m *Manager) update() {
 	}
 }
 
-//
 // endTask ends the current task.
 func (m *Manager) endTask() (err error) {
 	defer func() {
@@ -139,7 +135,6 @@ func (m *Manager) endTask() (err error) {
 	return
 }
 
-//
 // Task ttl.
 func (m *Manager) ttl() (ttl *api.TTL) {
 	freq := Settings.Frequency.Volume

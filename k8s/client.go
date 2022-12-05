@@ -7,7 +7,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client/config"
 )
 
-//
 // NewClient builds new k8s client.
 func NewClient() (newClient client.Client, err error) {
 	cfg, _ := config.GetConfig()

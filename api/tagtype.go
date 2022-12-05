@@ -8,20 +8,17 @@ import (
 	"net/http"
 )
 
-//
 // Routes
 const (
 	TagTypesRoot = "/tagtypes"
 	TagTypeRoot  = TagTypesRoot + "/:" + ID
 )
 
-//
 // TagTypeHandler handles the tag-type route.
 type TagTypeHandler struct {
 	BaseHandler
 }
 
-//
 // AddRoutes adds routes.
 func (h TagTypeHandler) AddRoutes(e *gin.Engine) {
 	routeGroup := e.Group("/")
@@ -165,7 +162,6 @@ func (h TagTypeHandler) Update(ctx *gin.Context) {
 	ctx.Status(http.StatusNoContent)
 }
 
-//
 // TagType REST resource.
 type TagType struct {
 	Resource
@@ -176,7 +172,6 @@ type TagType struct {
 	Tags     []Ref  `json:"tags"`
 }
 
-//
 // With updates the resource with the model.
 func (r *TagType) With(m *model.TagType) {
 	r.Resource.With(&m.Model)
@@ -192,7 +187,6 @@ func (r *TagType) With(m *model.TagType) {
 	}
 }
 
-//
 // Model builds a model.
 func (r *TagType) Model() (m *model.TagType) {
 	m = &model.TagType{

@@ -1,6 +1,5 @@
 package model
 
-//
 // Proxy configuration.
 // kind = (http|https)
 type Proxy struct {

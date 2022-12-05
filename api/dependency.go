@@ -8,20 +8,17 @@ import (
 	"net/http"
 )
 
-//
 // Routes
 const (
 	DependenciesRoot = "/dependencies"
 	DependencyRoot   = DependenciesRoot + "/:" + ID
 )
 
-//
 // DependencyHandler handles application dependency routes.
 type DependencyHandler struct {
 	BaseHandler
 }
 
-//
 // AddRoutes adds routes.
 func (h DependencyHandler) AddRoutes(e *gin.Engine) {
 	routeGroup := e.Group("/")
@@ -56,7 +53,6 @@ func (h DependencyHandler) Get(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, r)
 }
 
-//
 // List godoc
 // @summary List all dependencies.
 // @description List all dependencies.
@@ -145,7 +141,6 @@ func (h DependencyHandler) Delete(ctx *gin.Context) {
 	ctx.Status(http.StatusNoContent)
 }
 
-//
 // Dependency REST resource.
 type Dependency struct {
 	Resource
@@ -153,7 +148,6 @@ type Dependency struct {
 	From Ref `json:"from"`
 }
 
-//
 // With updates the resource using the model.
 func (r *Dependency) With(m *model.Dependency) {
 	r.Resource.With(&m.Model)

@@ -10,7 +10,6 @@ import (
 
 var Settings = &settings.Settings
 
-//
 // AddonRole defines the addon scopes.
 var AddonRole = []string{
 	"applications:get",
@@ -27,7 +26,6 @@ var AddonRole = []string{
 	"volumes:put",
 }
 
-//
 // Role represents a RBAC role which grants
 // access to particular resources in the hub.
 type Role struct {
@@ -35,14 +33,12 @@ type Role struct {
 	Resources []Resource `yaml:"resources"`
 }
 
-//
 // Resource is a set of permissions for a hub resource that a role may have.
 type Resource struct {
 	Name  string   `yaml:"name"`
 	Verbs []string `yaml:"verbs"`
 }
 
-//
 // User is a hub user which may have Roles.
 type User struct {
 	// Username
@@ -53,7 +49,6 @@ type User struct {
 	Roles []string `yaml:"roles"`
 }
 
-//
 // LoadRoles loads a list of Role structs from a yaml file
 // that is located at the given path.
 func LoadRoles(path string) (roles []Role, err error) {
@@ -78,7 +73,6 @@ func LoadRoles(path string) (roles []Role, err error) {
 	return
 }
 
-//
 // LoadUsers loads a list of User structs from a yaml
 // file that is located at the given path.
 func LoadUsers(path string) (users []User, err error) {

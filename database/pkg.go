@@ -5,6 +5,7 @@ import (
 	"fmt"
 	liberr "github.com/konveyor/controller/pkg/error"
 	"github.com/konveyor/controller/pkg/logging"
+	model2 "github.com/konveyor/tackle2-hub/migration/v3/model"
 	"github.com/konveyor/tackle2-hub/model"
 	"github.com/konveyor/tackle2-hub/settings"
 	"gorm.io/driver/sqlite"
@@ -22,7 +23,6 @@ const (
 	FKsOff           = "&_foreign_keys=no"
 )
 
-//
 // Open and automigrate the DB.
 func Open(enforceFKs bool) (db *gorm.DB, err error) {
 	connStr := fmt.Sprintf(ConnectionString, Settings.DB.Path)
@@ -49,7 +49,7 @@ func Open(enforceFKs bool) (db *gorm.DB, err error) {
 		return
 	}
 	sqlDB.SetMaxOpenConns(1)
-	err = db.AutoMigrate(model.Setting{})
+	err = db.AutoMigrate(model.Setting{}, model2.Tracker{}, model2.Ticket{})
 	if err != nil {
 		err = liberr.Wrap(err)
 		return
@@ -57,7 +57,6 @@ func Open(enforceFKs bool) (db *gorm.DB, err error) {
 	return
 }
 
-//
 // Close the DB.
 func Close(db *gorm.DB) (err error) {
 	var sqlDB *sql.DB
