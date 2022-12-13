@@ -14,6 +14,7 @@ type Tracker struct {
 	Connected   bool
 	LastUpdated time.Time
 	Message     string
+	Tickets     []Ticket
 }
 
 type Ticket struct {
@@ -35,7 +36,8 @@ type Ticket struct {
 	// URL to ticket in external tracker
 	Link string
 	// Status of ticket in external tracker
-	Status string
+	Status      string
+	LastUpdated time.Time
 
 	Application   Application
 	ApplicationID uint

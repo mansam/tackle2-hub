@@ -4,15 +4,20 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/konveyor/tackle2-hub/auth"
 	"github.com/konveyor/tackle2-hub/model"
-	"github.com/konveyor/tackle2-hub/ticket"
 	"gorm.io/gorm/clause"
 	"net/http"
+	"strconv"
 )
 
 // Routes
 const (
 	TrackersRoot = "/trackers"
 	TrackerRoot  = "/trackers" + "/:" + ID
+)
+
+// Params
+const (
+	Connected = "connected"
 )
 
 // TrackerHandler handles ticket tracker routes.
@@ -64,10 +69,15 @@ func (h TrackerHandler) Get(ctx *gin.Context) {
 // @router /trackers [get]
 func (h TrackerHandler) List(ctx *gin.Context) {
 	var list []model.Tracker
-	kind := ctx.Query(Kind)
 	db := h.preLoad(h.DB, clause.Associations)
+	kind := ctx.Query(Kind)
 	if kind != "" {
 		db = db.Where(Kind, kind)
+	}
+	q := ctx.Query(Connected)
+	if q != "" {
+		connected, _ := strconv.ParseBool(q)
+		db = db.Where(Connected, connected)
 	}
 	result := db.Find(&list)
 	if result.Error != nil {
@@ -113,17 +123,6 @@ func (h TrackerHandler) Create(ctx *gin.Context) {
 		return
 	}
 	m.Identity = i
-
-	connector, err := ticket.NewConnector(m)
-	if err != nil {
-		h.createFailed(ctx, err)
-		return
-	}
-	err = connector.GetMetadata()
-	if err != nil {
-		h.createFailed(ctx, err)
-		return
-	}
 
 	result = h.DB.Create(m)
 	if result.Error != nil {
