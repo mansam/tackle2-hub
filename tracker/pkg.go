@@ -36,7 +36,7 @@ type Connector interface {
 	// Refresh the status of a ticket.
 	Refresh(t *model.Ticket) error
 	//
-	RefreshAll() error
+	RefreshAll() (map[*model.Ticket]bool, error)
 	// GetMetadata from the tracker (ticket types, projects, etc)
 	GetMetadata() (Metadata, error)
 	// TestConnection to the external ticket tracker.

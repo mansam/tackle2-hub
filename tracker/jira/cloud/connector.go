@@ -49,11 +49,13 @@ func (r *Connector) Create(t *model.Ticket) (err error) {
 	return
 }
 
-func (r *Connector) RefreshAll() (err error) {
+func (r *Connector) RefreshAll() (tickets map[*model.Ticket]bool, err error) {
 	client, err := r.client()
 	if err != nil {
 		return
 	}
+
+	tickets = make(map[*model.Ticket]bool)
 
 	var keys []string
 	for i := range r.tracker.Tickets {
@@ -70,18 +72,19 @@ func (r *Connector) RefreshAll() (err error) {
 		issue := &issues[i]
 		issuesByKey[issue.Key] = issue
 	}
-
 	lastUpdated := time.Now()
 	for i := range r.tracker.Tickets {
 		t := &r.tracker.Tickets[i]
 		issue, found := issuesByKey[t.Reference]
 		if !found {
+			tickets[t] = false
 			continue
 		}
 		t.LastUpdated = lastUpdated
 		if issue.Fields != nil && issue.Fields.Status != nil {
 			t.Status = issue.Fields.Status.Name
 		}
+		tickets[t] = true
 	}
 	return
 }

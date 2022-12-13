@@ -33,6 +33,7 @@ func (m *Manager) Run(ctx context.Context) {
 				time.Sleep(time.Second)
 				m.reconnectTrackers()
 				m.refreshTickets()
+				m.createPending()
 			}
 		}
 	}()
@@ -100,42 +101,42 @@ func (m *Manager) refreshTickets() {
 		Log.Error(result.Error, "Failed to query trackers.")
 		return
 	}
-
+	for i := range list {
+		tracker := &list[i]
+		err := m.refresh(tracker)
+		if err != nil {
+			Log.Error(err, "Failed to refresh tracker.", "tracker", tracker.ID)
+		}
+	}
 }
-
-//
-//// Refresh all tickets..
-//func (m *Manager) refreshTickets() {
-//	var list []model.Ticket
-//	result := m.DB.Preload("Tracker.Identity").Preload("Application").Where("created = ?", true).Find(&list)
-//	if result.Error != nil {
-//		Log.Error(result.Error, "Failed to query tickets.")
-//		return
-//	}
-//	for _, t := range list {
-//		err := m.refresh(&t)
-//		if err != nil {
-//			Log.Error(err, "Failed to refresh ticket.", "ticket", t.ID)
-//		}
-//	}
-//}
 
 // Update the hub's representation of the ticket with fresh
 // status information from the external tracker.
-func (m *Manager) refresh(ticket *model.Ticket) (err error) {
-	conn, err := NewConnector(&ticket.Tracker)
+func (m *Manager) refresh(tracker *model.Tracker) (err error) {
+	conn, err := NewConnector(tracker)
 	if err != nil {
 		return
 	}
-	err = conn.Refresh(ticket)
+	tickets, err := conn.RefreshAll()
 	if err != nil {
-		Log.Error(err, "Failed to refresh ticket.", "ticket", ticket.ID)
-	}
-	result := m.DB.Save(ticket)
-	if result.Error != nil {
-		err = result.Error
 		return
 	}
+	for t, found := range tickets {
+		if found {
+			result := m.DB.Save(t)
+			if result.Error != nil {
+				Log.Error(result.Error, "Failed to save ticket.", "ticket", t.ID)
+				continue
+			}
+		} else {
+			result := m.DB.Delete(t)
+			if result.Error != nil {
+				Log.Error(result.Error, "Failed to delete ticket.", "ticket", t.ID)
+				continue
+			}
+		}
+	}
+
 	return
 }
 
