@@ -11,10 +11,11 @@ type BusinessService struct {
 
 type StakeholderGroup struct {
 	Model
-	Name         string `gorm:"index;unique;not null"`
-	Username     string
-	Description  string
-	Stakeholders []Stakeholder `gorm:"many2many:StakeholderGroupStakeholder;constraint:OnDelete:CASCADE"`
+	Name           string `gorm:"index;unique;not null"`
+	Username       string
+	Description    string
+	Stakeholders   []Stakeholder   `gorm:"many2many:StakeholderGroupStakeholder;constraint:OnDelete:CASCADE"`
+	MigrationWaves []MigrationWave `gorm:"many2many:MigrationWaveStakeholderGroups;constraint:OnDelete:CASCADE"`
 }
 
 type Stakeholder struct {
@@ -25,6 +26,9 @@ type Stakeholder struct {
 	BusinessServices []BusinessService  `gorm:"constraint:OnDelete:SET NULL"`
 	JobFunctionID    *uint              `gorm:"index"`
 	JobFunction      *JobFunction
+	Owns             []Application
+	Contributes      []Application      `gorm:"many2many:ApplicationContributors;constraint:OnDelete:CASCADE"`
+	MigrationWaves   []MigrationWave    `gorm:"many2many:MigrationWaveStakeholders;constraint:OnDelete:CASCADE"`
 }
 
 type JobFunction struct {

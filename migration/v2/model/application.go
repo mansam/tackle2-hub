@@ -26,6 +26,11 @@ type Application struct {
 	Identities        []Identity `gorm:"many2many:ApplicationIdentity;constraint:OnDelete:CASCADE"`
 	BusinessServiceID *uint      `gorm:"index"`
 	BusinessService   *BusinessService
+	OwnerID           *uint `gorm:"index"`
+	Owner             *Stakeholder
+	Contributors      []Stakeholder `gorm:"many2many:ApplicationContributors;constraint:OnDelete:CASCADE"`
+	MigrationWaveID   *uint `gorm:"index"`
+	MigrationWave     *MigrationWave
 }
 
 type Dependency struct {
