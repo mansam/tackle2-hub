@@ -22,7 +22,7 @@ var AddonRole = []string{
 	"proxies:get",
 	"settings:get",
 	"tags:*",
-	"tagtypes:*",
+	"tagcategories:*",
 	"tasks:get",
 	"tasks.report:*",
 	"tasks.bucket:get",

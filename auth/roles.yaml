@@ -100,7 +100,7 @@
         - get
         - post
         - put
-    - name: tagtypes
+    - name: tagcategories
       verbs:
         - delete
         - get
@@ -227,7 +227,7 @@
         - get
         - post
         - put
-    - name: tagtypes
+    - name: tagcategories
       verbs:
         - delete
         - get
@@ -316,7 +316,7 @@
     - name: tags
       verbs:
         - get
-    - name: tagtypes
+    - name: tagcategories
       verbs:
         - get
     - name: tasks

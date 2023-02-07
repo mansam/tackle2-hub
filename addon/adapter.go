@@ -46,8 +46,8 @@ type Adapter struct {
 	Identity Identity
 	// Proxy API.
 	Proxy Proxy
-	// TagType API.
-	TagType TagType
+	// TagCategory API.
+	TagCategory TagCategory
 	// Tag API.
 	Tag Tag
 	// client A REST client.
@@ -129,7 +129,7 @@ func newAdapter() (adapter *Adapter) {
 		Proxy: Proxy{
 			client: client,
 		},
-		TagType: TagType{
+		TagCategory: TagCategory{
 			client: client,
 		},
 		Tag: Tag{
