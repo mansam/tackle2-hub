@@ -17,7 +17,6 @@ type JSON = datatypes.JSON
 //
 // Unchanged models imported from previous migration.
 type Model = v2.Model
-type Application = v2.Application
 type BucketOwner = v2.BucketOwner
 type BusinessService = v2.BusinessService
 type Dependency = v2.Dependency
@@ -31,7 +30,6 @@ type Review = v2.Review
 type Setting = v2.Setting
 type Stakeholder = v2.Stakeholder
 type StakeholderGroup = v2.StakeholderGroup
-type Tag = v2.Tag
 type TagType = v2.TagType
 type Task = v2.Task
 type TaskGroup = v2.TaskGroup
@@ -52,7 +50,7 @@ func All() []interface{} {
 		Import{},
 		ImportTag{},
 		JobFunction{},
-		TagType{},
+		TagCategory{},
 		Tag{},
 		StakeholderGroup{},
 		Stakeholder{},
