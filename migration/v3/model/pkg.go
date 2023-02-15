@@ -53,6 +53,7 @@ func All() []interface{} {
 		Stakeholder{},
 		BusinessService{},
 		Application{},
+		ApplicationTags{},
 		Dependency{},
 		Review{},
 		Identity{},

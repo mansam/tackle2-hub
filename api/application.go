@@ -21,6 +21,12 @@ const (
 )
 
 //
+// Params
+const (
+	Source = "source"
+)
+
+//
 // ApplicationHandler handles application resource routes.
 type ApplicationHandler struct {
 	BaseHandler
@@ -321,17 +327,26 @@ func (h ApplicationHandler) TagList(ctx *gin.Context) {
 		h.reportError(ctx, result.Error)
 		return
 	}
-	db := h.DB.Model(app).Association("Tags")
-	list := []model.Tag{}
-	err := db.Find(&list)
-	if err != nil {
-		h.reportError(ctx, err)
+	db := h.preLoad(h.DB, clause.Associations)
+	source, found := ctx.GetQuery(Source)
+	if found {
+		condition := h.DB.Where("source = ?", source)
+		if source == "" {
+			condition = condition.Or("source IS NULL")
+		}
+		db = db.Where(condition)
+	}
+
+	list := []model.ApplicationTags{}
+	result = db.Find(&list, "ApplicationID = ?", id)
+	if result.Error != nil {
+		h.reportError(ctx, result.Error)
 		return
 	}
-	resources := []Ref{}
+	resources := []TagRef{}
 	for i := range list {
-		r := Ref{}
-		r.With(list[i].ID, list[i].Name)
+		r := TagRef{}
+		r.With(list[i].Tag.ID, list[i].Tag.Name, list[i].Source)
 		resources = append(resources, r)
 	}
 	ctx.JSON(http.StatusOK, resources)
@@ -414,7 +429,7 @@ type Application struct {
 	Review          *Ref        `json:"review"`
 	Comments        string      `json:"comments"`
 	Identities      []Ref       `json:"identities"`
-	Tags            []Ref       `json:"tags"`
+	Tags            []TagRef    `json:"tags"`
 	BusinessService *Ref        `json:"businessService"`
 }
 
@@ -444,10 +459,11 @@ func (r *Application) With(m *model.Application) {
 			ref)
 	}
 	for _, tag := range m.Tags {
-		ref := Ref{}
-		ref.With(tag.ID, tag.Name)
+		ref := TagRef{}
+		ref.With(tag.ID, tag.Name, "")
 		r.Tags = append(r.Tags, ref)
 	}
+
 }
 
 //

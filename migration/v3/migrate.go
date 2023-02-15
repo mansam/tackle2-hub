@@ -31,7 +31,30 @@ func (r Migration) Apply(db *gorm.DB) (err error) {
 		return
 	}
 
-	// Create tables for Trackers and Tickets
+	// Altering the primary key requires constructing a new table, so rename the old one,
+	// create the new one, copy over the rows, and then drop the old one.
+	err = db.Migrator().RenameTable("ApplicationTags", "ApplicationTags__old")
+	if err != nil  {
+		err = liberr.Wrap(err)
+		return
+	}
+	err = db.AutoMigrate(model.ApplicationTags{})
+	if err != nil {
+		err = liberr.Wrap(err)
+		return
+	}
+	result := db.Exec("INSERT INTO ApplicationTags (ApplicationID, TagID) SELECT ApplicationID, TagID FROM ApplicationTags__old;")
+	if result.Error != nil {
+		err = liberr.Wrap(result.Error)
+		return
+	}
+	err = db.Migrator().DropTable("ApplicationTags__old")
+	if err != nil {
+		err = liberr.Wrap(err)
+		return
+	}
+
+	// Create tables for Trackers, Tickets
 	err = db.AutoMigrate(r.Models()...)
 	if err != nil {
 		err = liberr.Wrap(err)

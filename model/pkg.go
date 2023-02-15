@@ -39,5 +39,9 @@ type Project = model.Project
 type IssueType = model.IssueType
 
 //
+// Join tables
+type ApplicationTags = model.ApplicationTags
+
+//
 // Errors
 type DependencyCyclicError = model.DependencyCyclicError
