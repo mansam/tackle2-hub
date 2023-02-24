@@ -38,7 +38,7 @@ func (r Migration) Apply(db *gorm.DB) (err error) {
 		err = liberr.Wrap(err)
 		return
 	}
-	err = db.AutoMigrate(model.ApplicationTags{})
+	err = db.Migrator().CreateTable(model.ApplicationTag{})
 	if err != nil {
 		err = liberr.Wrap(err)
 		return

@@ -40,7 +40,7 @@ type IssueType = model.IssueType
 
 //
 // Join tables
-type ApplicationTags = model.ApplicationTags
+type ApplicationTag = model.ApplicationTag
 
 //
 // Errors

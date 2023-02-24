@@ -142,7 +142,7 @@ func (r *Client) Post(path string, object interface{}) (err error) {
 
 //
 // Put a resource.
-func (r *Client) Put(path string, object interface{}) (err error) {
+func (r *Client) Put(path string, object interface{}, params ...Param) (err error) {
 	request := func() (request *http.Request, err error) {
 		bfr, err := json.Marshal(object)
 		if err != nil {
@@ -157,6 +157,13 @@ func (r *Client) Put(path string, object interface{}) (err error) {
 			URL:    r.join(path),
 		}
 		request.Header.Set(Accept, AppJson)
+		if len(params) > 0 {
+			q := request.URL.Query()
+			for _, p := range params {
+				q.Add(p.Key, p.Value)
+			}
+			request.URL.RawQuery = q.Encode()
+		}
 		return
 	}
 	reply, err := r.send(request)
@@ -189,7 +196,7 @@ func (r *Client) Put(path string, object interface{}) (err error) {
 
 //
 // Delete a resource.
-func (r *Client) Delete(path string) (err error) {
+func (r *Client) Delete(path string, params ...Param) (err error) {
 	request := func() (request *http.Request, err error) {
 		request = &http.Request{
 			Header: http.Header{},
@@ -197,6 +204,13 @@ func (r *Client) Delete(path string) (err error) {
 			URL:    r.join(path),
 		}
 		request.Header.Set(Accept, "")
+		if len(params) > 0 {
+			q := request.URL.Query()
+			for _, p := range params {
+				q.Add(p.Key, p.Value)
+			}
+			request.URL.RawQuery = q.Encode()
+		}
 		return
 	}
 	reply, err := r.send(request)
