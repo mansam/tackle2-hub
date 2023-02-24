@@ -16,10 +16,6 @@ const (
 	ApplicationRoot     = ApplicationsRoot + "/:" + ID
 	ApplicationTagsRoot = ApplicationRoot + "/tags"
 	ApplicationTagRoot  = ApplicationTagsRoot + "/:" + ID2
-	ApplicationSourcesRoot = ApplicationRoot + "/sources"
-	ApplicationSourceRoot = ApplicationSourcesRoot + "/:" + Source
-	ApplicationSourceTagsRoot = ApplicationSourceRoot + "/tags"
-	ApplicationSourceTagRoot = ApplicationSourceTagsRoot + "/:" + ID2
 	AppBucketRoot       = ApplicationRoot + "/bucket/*" + Wildcard
 )
 
@@ -448,7 +444,8 @@ func (h ApplicationHandler) TagReplace(ctx *gin.Context) {
 		return
 	}
 
-	// remove all the existing tag associations for that source and app id
+	// remove all the existing tag associations for that source and app id.
+	// if source is not provided, all tag associations will be removed.
 	db := h.DB.Where("ApplicationID = ?", id)
 	source, found := ctx.GetQuery(Source)
 	if found {
@@ -464,6 +461,7 @@ func (h ApplicationHandler) TagReplace(ctx *gin.Context) {
 		return
 	}
 
+	// create new associations
 	appTags := []model.ApplicationTag{}
 	for _, ref := range refs {
 		appTags = append(appTags, model.ApplicationTag{
@@ -472,7 +470,6 @@ func (h ApplicationHandler) TagReplace(ctx *gin.Context) {
 			Source: source,
 		})
 	}
-
 	err = db.Create(&appTags).Error
 	if err != nil {
 		h.reportError(ctx, err)
