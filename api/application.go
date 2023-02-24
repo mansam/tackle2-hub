@@ -144,7 +144,7 @@ func (h ApplicationHandler) Create(ctx *gin.Context) {
 	}
 	m := r.Model()
 	m.CreateUser = h.BaseHandler.CurrentUser(ctx)
-	result := h.DB.Create(m)
+	result := h.DB.Omit("Tags").Create(m)
 	if result.Error != nil {
 		h.reportError(ctx, result.Error)
 		return
@@ -156,15 +156,16 @@ func (h ApplicationHandler) Create(ctx *gin.Context) {
 	}
 
 	tags := []model.ApplicationTag{}
-	for _, t := range r.Tags {
-		tags = append(tags, model.ApplicationTag{TagID: t.ID, ApplicationID: m.ID, Source: t.Source})
+	if len(r.Tags) > 0 {
+		for _, t := range r.Tags {
+			tags = append(tags, model.ApplicationTag{TagID: t.ID, ApplicationID: m.ID, Source: t.Source})
+		}
+		result = h.DB.Create(&tags)
+		if result.Error != nil {
+			h.reportError(ctx, result.Error)
+			return
+		}
 	}
-	result = h.DB.Create(&tags)
-	if result.Error != nil {
-		h.reportError(ctx, result.Error)
-		return
-	}
-
 	r.With(m)
 	r.WithTags(tags)
 
@@ -274,14 +275,16 @@ func (h ApplicationHandler) Update(ctx *gin.Context) {
 		h.reportError(ctx, err)
 		return
 	}
-	tags := []model.ApplicationTag{}
-	for _, t := range r.Tags {
-		tags = append(tags, model.ApplicationTag{TagID: t.ID, ApplicationID: m.ID, Source: t.Source})
-	}
-	result = h.DB.Create(&tags)
-	if result.Error != nil {
-		h.reportError(ctx, result.Error)
-		return
+	if len(r.Tags) > 0 {
+		tags := []model.ApplicationTag{}
+		for _, t := range r.Tags {
+			tags = append(tags, model.ApplicationTag{TagID: t.ID, ApplicationID: m.ID, Source: t.Source})
+		}
+		result = h.DB.Create(&tags)
+		if result.Error != nil {
+			h.reportError(ctx, result.Error)
+			return
+		}
 	}
 
 	ctx.Status(http.StatusNoContent)
@@ -462,18 +465,20 @@ func (h ApplicationHandler) TagReplace(ctx *gin.Context) {
 	}
 
 	// create new associations
-	appTags := []model.ApplicationTag{}
-	for _, ref := range refs {
-		appTags = append(appTags, model.ApplicationTag{
-			ApplicationID: id,
-			TagID: ref.ID,
-			Source: source,
-		})
-	}
-	err = db.Create(&appTags).Error
-	if err != nil {
-		h.reportError(ctx, err)
-		return
+	if len(refs) > 0 {
+		appTags := []model.ApplicationTag{}
+		for _, ref := range refs {
+			appTags = append(appTags, model.ApplicationTag{
+				ApplicationID: id,
+				TagID:         ref.ID,
+				Source:        source,
+			})
+		}
+		err = db.Create(&appTags).Error
+		if err != nil {
+			h.reportError(ctx, err)
+			return
+		}
 	}
 
 	ctx.Status(http.StatusNoContent)
