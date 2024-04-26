@@ -1083,6 +1083,7 @@ type Application struct {
 	Risk            string      `json:"risk"`
 	Confidence      int         `json:"confidence"`
 	Effort          int         `json:"effort"`
+	Deployment      *Ref        `json:"deployment"`
 }
 
 // With updates the resource using the model.
@@ -1129,7 +1130,6 @@ func (r *Application) With(m *model.Application, tags []model.ApplicationTag) {
 		ref.With(a.ID, "")
 		r.Assessments = append(r.Assessments, ref)
 	}
-
 	if len(m.Analyses) > 0 {
 		sort.Slice(m.Analyses, func(i, j int) bool {
 			return m.Analyses[i].ID < m.Analyses[j].ID
@@ -1137,6 +1137,11 @@ func (r *Application) With(m *model.Application, tags []model.ApplicationTag) {
 		r.Effort = m.Analyses[len(m.Analyses)-1].Effort
 	}
 	r.Risk = assessment.RiskUnassessed
+	if m.Deployment != nil {
+		ref := &Ref{}
+		ref.With(m.Deployment.ID, "")
+		r.Deployment = ref
+	}
 }
 
 // WithVirtualTags updates the resource with tags derived from assessments.

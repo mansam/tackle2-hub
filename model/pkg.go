@@ -45,6 +45,8 @@ type TaskGroup = model.TaskGroup
 type TaskReport = model.TaskReport
 type Ticket = model.Ticket
 type Tracker = model.Tracker
+type Platform = model.Platform
+type Deployment = model.Deployment
 
 type TTL = model.TTL
 

@@ -94,6 +94,8 @@ func All() []Handler {
 		&QuestionnaireHandler{},
 		&AssessmentHandler{},
 		&ArchetypeHandler{},
+		&PlatformHandler{},
+		&DeploymentHandler{},
 	}
 }
 

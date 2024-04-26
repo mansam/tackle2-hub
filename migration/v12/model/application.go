@@ -31,6 +31,8 @@ type Application struct {
 	MigrationWave     *MigrationWave
 	Ticket            *Ticket      `gorm:"constraint:OnDelete:CASCADE"`
 	Assessments       []Assessment `gorm:"constraint:OnDelete:CASCADE"`
+	DeploymentID      *uint        `gorm:"index;constraint:OnDelete:CASCADE"`
+	Deployment        *Deployment
 }
 
 type Fact struct {
