@@ -206,6 +206,14 @@ func (h IdentityHandler) Update(ctx *gin.Context) {
 		return
 	}
 
+	for i := range m.Applications {
+		err = discover(ctx, &m.Applications[i])
+		if err != nil {
+			_ = ctx.Error(err)
+			return
+		}
+	}
+
 	h.Status(ctx, http.StatusNoContent)
 }
 

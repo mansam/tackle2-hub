@@ -34,6 +34,7 @@ const (
 	EnvDisconnected            = "DISCONNECTED"
 	EnvAnalysisReportPath      = "ANALYSIS_REPORT_PATH"
 	EnvAnalysisArchiverEnabled = "ANALYSIS_ARCHIVER_ENABLED"
+	EnvLanguageDiscoveryTask   = "LANGUAGE_DISCOVERY_TASK"
 )
 
 type Hub struct {
@@ -81,6 +82,11 @@ type Hub struct {
 			Delayed   time.Duration
 			Postponed time.Duration
 			Rate      int
+		}
+		Kinds struct {
+			Discovery struct {
+				Language string
+			}
 		}
 	}
 	// Frequency
@@ -257,6 +263,10 @@ func (r *Hub) Load() (err error) {
 		r.Analysis.ArchiverEnabled = b
 	} else {
 		r.Analysis.ArchiverEnabled = true
+	}
+	r.Task.Kinds.Discovery.Language, found = os.LookupEnv(EnvLanguageDiscoveryTask)
+	if !found {
+		r.Task.Kinds.Discovery.Language = "language-discovery"
 	}
 	return
 }
